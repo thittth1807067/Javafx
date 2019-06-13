@@ -1,45 +1,39 @@
 package entity;
 
-import mainThread.MainApplication;
+
 
 public class Account {
+
+    private int userID;
     private String username;
     private String password;
-    private int balance;
-    //    private int status;
     private String confirmPassword;
     private String email;
     private String phone;
     private String address;
+    private int balance;
+//    private int status;
 
     public Account() {
     }
 
-    public Account(MainApplication mainApplication) {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    public Account(int userID, String username, String password, String confirmPassword, String email, String phone, String address, int balance) {
+        this.userID = userID;
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
+        this.confirmPassword = confirmPassword;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
         this.balance = balance;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getConfirmPassword() {
@@ -74,10 +68,36 @@ public class Account {
         this.address = address;
     }
 
-
-    public void show() {
+    public String getUsername() {
+        return username;
     }
 
-    public void getAccount() {
+    public void setUsername(String username) {
+        this.username = username;
     }
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+//    public int getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(int status) {
+//        this.status = status;
+//    }
 }

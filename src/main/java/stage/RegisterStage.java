@@ -15,14 +15,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import mainThread.MainApplication;
 import model.AccountModel;
-
+import mainThread.Main;
 
 
 public class RegisterStage extends Stage {
 
-    private static final int REGISTER_STAGE_WIDTH = 500;
+    private static final int REGISTER_STAGE_WIDTH = 400;
     private static final int REGISTER_STAGE_HEIGHT = 400;
     private VBox vBox;
     private HBox titleBox;
@@ -30,6 +29,7 @@ public class RegisterStage extends Stage {
     private HBox btnBox;
 
     private Label lblTitle;
+    private Label lblUserID;
     private Label lblUsername;
     private Label lblPassword;
     private Label lblConfirmPwd;
@@ -37,6 +37,7 @@ public class RegisterStage extends Stage {
     private Label lblPhone;
     private Label lblAddress;
     private Label lblBalance;
+    private TextField txtUserID;
     private TextField txtUsername;
     private PasswordField pwdPassword;
     private PasswordField pwdConfirmPassword;
@@ -49,14 +50,14 @@ public class RegisterStage extends Stage {
 
     private Scene scene;
     private Stage stage;
-    private MainApplication mainApplication;
+    private Main main;
     private LoginStage loginStage;
     private AccountModel model;
 
 
-    public RegisterStage(MainApplication mainApplication) {
+    public RegisterStage(Main main) {
         this.model = new AccountModel();
-        this.mainApplication = mainApplication;
+        this.main = main;
         initComponent();
         this.scene = new Scene(this.vBox, REGISTER_STAGE_WIDTH, REGISTER_STAGE_HEIGHT);
         this.stage = this;
@@ -68,14 +69,14 @@ public class RegisterStage extends Stage {
         this.titleBox.setAlignment(Pos.TOP_LEFT);
         this.titleBox.setSpacing(10);
         this.lblTitle = new Label("Register");
-        this.lblTitle.setFont(Font.font(18));
-        this.lblTitle.setTextFill(Color.web("#1ed98f"));
+        this.lblTitle.setStyle(" -fx-text-fill: #2d0fce;-fx-font: normal bold 18px 'serif' ");
         this.titleBox.getChildren().add(lblTitle);
 
         this.gridPane = new GridPane();
         this.gridPane.setPadding(new Insets(10));
         this.gridPane.setHgap(10);
         this.gridPane.setVgap(10);
+        this.lblUserID = new Label("UserID");
         this.lblUsername = new Label("Username");
         this.lblPassword = new Label("Password");
         this.lblConfirmPwd = new Label("Confirm Password");
@@ -83,6 +84,7 @@ public class RegisterStage extends Stage {
         this.lblPhone = new Label("Phone");
         this.lblAddress = new Label("Address");
         this.lblBalance = new Label("Balance");
+        this.txtUserID = new TextField();
         this.txtUsername = new TextField();
         this.pwdPassword = new PasswordField();
         this.pwdConfirmPassword = new PasswordField();
@@ -99,21 +101,23 @@ public class RegisterStage extends Stage {
         this.btnBox.setSpacing(10);
         this.btnBox.setAlignment(Pos.CENTER);
         this.btnBox.getChildren().addAll(this.btnSignUp, this.btnReset);
-        this.gridPane.add(this.lblUsername, 0, 0);
-        this.gridPane.add(this.txtUsername, 1, 0);
-        this.gridPane.add(this.lblPassword, 0, 1);
-        this.gridPane.add(this.pwdPassword, 1, 1);
-        this.gridPane.add(this.lblConfirmPwd, 0, 2);
-        this.gridPane.add(this.pwdConfirmPassword, 1, 2);
-        this.gridPane.add(this.lblEmail, 0, 3);
-        this.gridPane.add(this.txtEmail, 1, 3);
-        this.gridPane.add(this.lblPhone, 0, 4);
-        this.gridPane.add(this.txtPhone, 1, 4);
-        this.gridPane.add(this.lblAddress, 0, 5);
-        this.gridPane.add(this.txtAddress, 1, 5);
-        this.gridPane.add(this.lblBalance, 0, 6);
-        this.gridPane.add(this.txtBalance, 1, 6);
-        this.gridPane.add(this.btnBox, 1, 7);
+        this.gridPane.add(this.lblUserID, 0, 0);
+        this.gridPane.add(this.txtUserID, 1, 0);
+        this.gridPane.add(this.lblUsername, 0, 1);
+        this.gridPane.add(this.txtUsername, 1, 1);
+        this.gridPane.add(this.lblPassword, 0, 2);
+        this.gridPane.add(this.pwdPassword, 1, 2);
+        this.gridPane.add(this.lblConfirmPwd, 0, 3);
+        this.gridPane.add(this.pwdConfirmPassword, 1, 3);
+        this.gridPane.add(this.lblEmail, 0, 4);
+        this.gridPane.add(this.txtEmail, 1, 4);
+        this.gridPane.add(this.lblPhone, 0, 5);
+        this.gridPane.add(this.txtPhone, 1, 5);
+        this.gridPane.add(this.lblAddress, 0, 6);
+        this.gridPane.add(this.txtAddress, 1, 6);
+        this.gridPane.add(this.lblBalance, 0, 7);
+        this.gridPane.add(this.txtBalance, 1, 7);
+        this.gridPane.add(this.btnBox, 1, 8);
 
         this.vBox = new VBox();
         this.vBox.setPadding(new Insets(10));
@@ -127,6 +131,7 @@ public class RegisterStage extends Stage {
             public void handle(ActionEvent event) {
                 RegisterController registerController = new RegisterController();
                 Account registerAccount = new Account(
+                        Integer.parseInt(txtUserID.getText()),
                         txtUsername.getText(),
                         pwdPassword.getText(),
                         pwdConfirmPassword.getText(),
@@ -153,7 +158,8 @@ public class RegisterStage extends Stage {
                 }
                 registerController.create(registerAccount);
 //                main.setIsRegistered(true);
-                mainApplication.getLoginStage().show();
+                main.getLoginStage().show();
+                txtUserID.clear();
                 txtUsername.clear();
                 pwdPassword.clear();
                 pwdConfirmPassword.clear();
@@ -358,16 +364,12 @@ public class RegisterStage extends Stage {
         this.stage = stage;
     }
 
-    public MainApplication getMainApplication() {
-        return getMainApplication();
+    public Main getMain() {
+        return main;
     }
 
-    public void setMain(MainApplication mainApplication) {
-
-        this.MainApplication() = mainApplication;
-    }
-
-    private MainApplication MainApplication() {
+    public void setMain(Main main) {
+        this.main = main;
     }
 
 

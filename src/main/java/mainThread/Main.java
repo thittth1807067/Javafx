@@ -1,6 +1,6 @@
 package mainThread;
 
-import entity.Account;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,20 +12,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import stage.*;
 
 import javax.swing.*;
 
-public class MainApplication extends Application {
+public class Main extends Application {
 
     private String accountName;
+    private String userID;
 
     private VBox vBox;
     private HBox titleBox;
@@ -44,8 +42,8 @@ public class MainApplication extends Application {
     private Label lblRegister;
     private Label lblWithdraw;
     private Label lblDeposit;
+    private Label lblTransfer;
     private HBox btnBox;
-
 
     private Pane pane;
     private Scene scene;
@@ -54,34 +52,42 @@ public class MainApplication extends Application {
     private RegisterStage registerStage;
     private WithdrawStage withdrawStage;
     private DepositStage depositStage;
+    private TransferStage transferStage;
+    private EditStage editStage;
+    private BorderPane borderPane;
+    private Scene newScene;
 
+    private Button btnEdit;
 
-    private MainApplication mainApplication;
+    private Main main;
     private int accountBalance;
 
     private static boolean isLoggedIn = false;
-    private Button btnWithdraw;
-    private Button btnDeposit;
-    private Account account;
+
+    private AccountStage accountStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.mainApplication = this;
+
+        this.main = this;
         this.stage = primaryStage;
         initComponent();
 
 
         if (isLoggedIn) {
             // show stage.
+
             this.stage.show();
 
         } else {
-            this.account = new Account(this);
-            this.account.show();
+            this.accountStage = new AccountStage(this);
+            this.accountStage.show();
 
         }
+//        this.stage.initStyle(StageStyle.TRANSPARENT);
 
-        this.scene = new Scene(this.vBox, 500, 200);
+        this.scene = new Scene(this.vBox, 500, 400);
+        this.scene.getStylesheets().add("style.css");
         this.stage.setScene(this.scene);
 
     }
@@ -91,11 +97,8 @@ public class MainApplication extends Application {
         this.vBox = new VBox();
 
         this.titleBox = new HBox();
-        this.lblTitle = new Label("Spring Hero Bank");
-        this.lblTitle.setFont(Font.font(18));
-        this.lblTitle.setTextFill(Color.web("#ff0cb4"));
-        this.titleBox.getChildren().add(lblTitle);
-        this.titleBox.setAlignment(Pos.TOP_LEFT);
+        this.titleBox.setStyle(" -fx-background-color: red;");
+        this.titleBox.setAlignment(Pos.CENTER);
         this.titleBox.setSpacing(10);
 
         this.gridPaneContent = new GridPane();
@@ -103,21 +106,16 @@ public class MainApplication extends Application {
         this.lblBalance = new Label("Balance:");
         this.lblAccountName = new Label(this.accountName);
         this.lblBalanceValue = new Label(String.valueOf(this.accountBalance));
+        this.btnEdit = new Button("Edit");
         this.gridPaneContent.add(this.lblAcount, 0, 0);
         this.gridPaneContent.add(this.lblAccountName, 1, 0);
         this.gridPaneContent.add(this.lblBalance, 0, 1);
         this.gridPaneContent.add(this.lblBalanceValue, 1, 1);
+        this.gridPaneContent.add(this.btnEdit, 1, 2);
         this.gridPaneContent.setAlignment(Pos.CENTER);
-        this.gridPaneContent.setPadding(new Insets(10));
+        this.gridPaneContent.setPadding(new Insets(0));
         this.gridPaneContent.setVgap(10);
         this.gridPaneContent.setHgap(10);
-        this.btnBox = new HBox();
-        this.btnWithdraw = new Button("Withdraw");
-        this.btnDeposit = new Button("Deposit");
-        this.btnBox.getChildren().addAll(this.btnWithdraw, this.btnDeposit);
-        this.btnBox.setAlignment(Pos.CENTER);
-        this.btnBox.setSpacing(10);
-        this.gridPaneContent.add(btnBox, 1, 2);
 
 
         this.categoryBox = new VBox();
@@ -125,10 +123,11 @@ public class MainApplication extends Application {
         this.lblRegister = new Label("Register");
         this.lblWithdraw = new Label("Withdraw");
         this.lblDeposit = new Label("Deposit");
+        this.lblTransfer = new Label("Transfer");
         this.categoryBox.setAlignment(Pos.TOP_LEFT);
         this.categoryBox.setSpacing(10);
-        this.categoryBox.setPadding(new Insets(-20, 0, 0, 10));
-        this.categoryBox.getChildren().addAll(this.lblLogin, this.lblRegister, this.lblWithdraw, this.lblDeposit);
+        this.categoryBox.setPadding(new Insets(-95, 0, 0, 20));
+        this.categoryBox.getChildren().addAll(this.lblLogin, this.lblRegister, this.lblWithdraw, this.lblDeposit, this.lblTransfer);
 
         this.mainBox = new VBox();
         this.mainBox.setPadding(new Insets(0));
@@ -140,31 +139,25 @@ public class MainApplication extends Application {
         this.vBox.setSpacing(30);
         this.vBox.setPadding(new Insets(10, 10, 10, 10));
 
-
-        this.withdrawStage = new WithdrawStage(mainApplication);
-        this.depositStage = new DepositStage(mainApplication);
-
-        btnDeposit.setOnAction(new EventHandler<ActionEvent>() {
+        this.editStage = new EditStage(main);
+        btnEdit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                depositStage.showAndWait();
+                editStage.showAndWait();
             }
         });
 
-        btnWithdraw.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                depositStage.showAndWait();
-            }
-        });
 
-        this.loginStage = new LoginStage(mainApplication);
-        this.registerStage = new RegisterStage(mainApplication);
-        this.withdrawStage = new WithdrawStage(mainApplication);
-        this.depositStage = new DepositStage(mainApplication);
+        this.loginStage = new LoginStage(main);
+        this.registerStage = new RegisterStage(main);
+        this.withdrawStage = new WithdrawStage(main);
+        this.depositStage = new DepositStage(main);
+        this.transferStage = new TransferStage(main);
+
         lblLogin.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+//                setUserAgentStylesheet(STYLESHEET_CASPIAN);
                 loginStage.show();
             }
         });
@@ -190,7 +183,12 @@ public class MainApplication extends Application {
             }
         });
 
-
+        lblTransfer.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transferStage.show();
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -294,12 +292,12 @@ public class MainApplication extends Application {
         this.stage = stage;
     }
 
-    public MainApplication getMain() {
-        return mainApplication;
+    public Main getMain() {
+        return main;
     }
 
-    public void setMain(MainApplication mainApplication) {
-        this.mainApplication = mainApplication;
+    public void setMain(Main main) {
+        this.main = main;
     }
 
     public VBox getMainBox() {
@@ -386,20 +384,28 @@ public class MainApplication extends Application {
         this.btnBox = btnBox;
     }
 
-    public Button getBtnWithdraw() {
-        return btnWithdraw;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setBtnWithdraw(Button btnWithdraw) {
-        this.btnWithdraw = btnWithdraw;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public Button getBtnDeposit() {
-        return btnDeposit;
+    public Label getLblTransfer() {
+        return lblTransfer;
     }
 
-    public void setBtnDeposit(Button btnDeposit) {
-        this.btnDeposit = btnDeposit;
+    public void setLblTransfer(Label lblTransfer) {
+        this.lblTransfer = lblTransfer;
+    }
+
+    public TransferStage getTransferStage() {
+        return transferStage;
+    }
+
+    public void setTransferStage(TransferStage transferStage) {
+        this.transferStage = transferStage;
     }
 
     public void setLblBalanceValue(Label lblBalanceValue) {
@@ -410,7 +416,7 @@ public class MainApplication extends Application {
         return accountName;
     }
 
-    public void setAccountName ( String accountName) {
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
 
@@ -435,8 +441,31 @@ public class MainApplication extends Application {
     }
 
     public static void setIsLoggedIn(boolean isLoggedIn) {
-        MainApplication.isLoggedIn = isLoggedIn;
+        Main.isLoggedIn = isLoggedIn;
     }
 
+    public Button getBtnEdit() {
+        return btnEdit;
+    }
+
+    public void setBtnEdit(Button btnEdit) {
+        this.btnEdit = btnEdit;
+    }
+
+    public AccountStage getAccountStage() {
+        return accountStage;
+    }
+
+    public void setAccountStage(AccountStage accountStage) {
+        this.accountStage = accountStage;
+    }
+
+    public EditStage getEditStage() {
+        return editStage;
+    }
+
+    public void setEditStage(EditStage editStage) {
+        this.editStage = editStage;
+    }
 
 }

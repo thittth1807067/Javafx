@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -14,9 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 //import model.AccountModel;
-import mainThread.MainApplication;
 import model.AccountModel;
-import sample.Main;
+import mainThread.Main;
 
 public class LoginStage extends Stage {
 
@@ -37,18 +37,23 @@ public class LoginStage extends Stage {
     private Button btnSignUp;
 
     private RegisterStage registerStage;
+    private BorderPane borderPane;
+    private Scene newScene;
     private Scene scene;
     private Stage stage;
     private Main main;
     private AccountModel model;
 
-    public LoginStage(MainApplication main) {
+    public LoginStage(Main main) {
         this.model = new AccountModel();
         this.main = main;
         this.initComponent();
         this.scene = new Scene(this.vBox, LOGIN_STAGE_WIDTH, LOGIN_STAGE_HEIGHT);
         this.stage = this;
         this.stage.setScene(this.scene);
+
+        this.borderPane = new BorderPane();
+        this.newScene = new Scene(this.borderPane, 200,100);
     }
 
 
@@ -56,9 +61,9 @@ public class LoginStage extends Stage {
         this.titleBox = new HBox();
         this.titleBox.setAlignment(Pos.TOP_LEFT);
         this.titleBox.setSpacing(10);
-        this.lblTitle = new Label("Spring Hero Bank");
-        this.lblTitle.setFont(Font.font(17));
-        this.lblTitle.setTextFill(Color.web("#f9e70b"));
+        this.lblTitle = new Label("Login" );
+
+        this.lblTitle.setStyle("-fx-text-fill: #2d0fce;-fx-font: normal bold 18px 'serif' ; ");
         this.titleBox.getChildren().add(lblTitle);
 
         this.gridPane = new GridPane();
@@ -92,7 +97,8 @@ public class LoginStage extends Stage {
                     showAlert(Alert.AlertType.ERROR, "Please enter password");
                     return;
                 }
-
+                txtAccount.clear();
+                pwdPassword.clear();
             }
         });
         this.btnReset.setOnAction(new EventHandler<ActionEvent>() {

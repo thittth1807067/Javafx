@@ -14,14 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import mainThread.MainApplication;
+import mainThread.Main;
 
 
 public class DepositStage extends Stage {
     private int amountValue;
     private int accountBalance;
 
-    private MainApplication mainApplication;
+    private Main main;
     private GridPane gridPane;
     private VBox vBox;
     private HBox titleBox;
@@ -37,8 +37,8 @@ public class DepositStage extends Stage {
     private Scene scene;
 
 
-    public DepositStage(MainApplication mainApplication) {
-        this.mainApplication = mainApplication;
+    public DepositStage(Main main) {
+        this.main = main;
         initComponent();
     }
 //    public DepositStage(Label accountStatus){
@@ -54,12 +54,12 @@ public class DepositStage extends Stage {
         this.amountValue = amountValue;
     }
 
-    public MainApplication getMain() {
-        return mainApplication;
+    public Main getMain() {
+        return main;
     }
 
-    public void setMain(MainApplication main) {
-        this.mainApplication = main;
+    public void setMain(Main main) {
+        this.main = main;
     }
 
     public GridPane getGridPane() {
@@ -178,9 +178,9 @@ public class DepositStage extends Stage {
                 int accountValue = 0;
                 try {
                     accountValue = Integer.parseInt(txtAmountValue.getText());
-                    int balance = mainApplication.getAccountBalance() + accountValue;
-                    mainApplication.getLblBalanceValue().setText(String.valueOf(balance));
-                    mainApplication.setAccountBalance(balance);
+                    int balance = main.getAccountBalance() + accountValue;
+                    main.getLblBalanceValue().setText(String.valueOf(balance));
+                    main.setAccountBalance(balance);
                     txtAmountValue.clear();
                     close();
                 } catch (NumberFormatException ex) {
@@ -192,6 +192,8 @@ public class DepositStage extends Stage {
         btnClose.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+//                Boolean answer = ConfirmStage.display("Title", "Sure you want to exit?");
+//                if (answer) close();
                 close();
             }
         });
@@ -205,4 +207,5 @@ public class DepositStage extends Stage {
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
     }
+
 }
